@@ -12,14 +12,14 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
-                        sh "npm install
-                            npm test
-                            docker build -t localhost:5000/instapro_data:latest .
+                        sh "npm install \n
+                            npm test \n
+                            docker build -t localhost:5000/instapro_data:latest . \n
                             docker push localhost:5000/instapro_data:latest"
                     } else {
-                        sh "npm install
-                            npm test
-                            docker build -t localhost:5000/instapro_data:testing .
+                        sh "npm install \n
+                            npm test \n
+                            docker build -t localhost:5000/instapro_data:testing . \n
                             docker push localhost:5000/instapro_data:testing"
                     }
                 }
