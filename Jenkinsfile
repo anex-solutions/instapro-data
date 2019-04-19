@@ -10,19 +10,23 @@ pipeline {
         }
         stage('Build Image') {
             steps {
-                if (env.BRANCH_NAME == 'master') {
-                    echo 'Build :latest'
-                } else {
-                    echo 'Build :testing'
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        echo 'Build :latest'
+                    } else {
+                        echo 'Build :testing'
+                    }
                 }
             }
         }
         stage('Deploy') {
             steps {
-                if (env.BRANCH_NAME == 'master') {
-                    echo 'deploy app:latest to k8s ascess at latest.anex-solutions.co.uk/instapro'
-                } else {
-                    echo 'deploy app:latest with data-ms swapped to :testing to k8s ascess at testing.anex-solutions.co.uk/instapro-' + env.BRANCH_NAME
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        echo 'deploy app:latest to k8s ascess at latest.anex-solutions.co.uk/instapro'
+                    } else {
+                        echo 'deploy app:latest with data-ms swapped to :testing to k8s ascess at testing.anex-solutions.co.uk/instapro-' + env.BRANCH_NAME
+                    }
                 }
             }
         }
