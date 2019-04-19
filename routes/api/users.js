@@ -32,29 +32,37 @@ router.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           username: req.body.username,
-          password: bcryptPassword(req.body.password),
+          password: req.body.password,
           image: req.body.image
         });
-        newUser
-          .save()
-          .then(user => res.json(user))
-          .catch(err => console.log(err));
+
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(user => res.json(user))
+              .catch(err => console.log(err));
+          });
+        });
       }
     })
     .catch(err => console.log(err));
 });
 
-const bcryptPassword = password => {
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) => {
-      password = hash;
-    });
-  });
-  return password;
-};
+// const bcryptPassword = password => {
+//   console.log(`pass before bcrypt: ${password}`);
+//   bcrypt.genSalt(10, (err, salt) => {
+//     console.log(`salt: ${salt}`);
+//     bcrypt.hash(password, salt, (err, hash) => {
+//       console.log(`hash: ${hash}`);
+//       return hash;
+//     });
+//   });
+// };
 
 router.post("/login", (req, res) => {
-  const login = req.body.username || req.body.email;
   const password = req.body.password;
   const { errors, isValid } = validateLogin(req.body);
   if (!isValid) return res.status(400).json(errors);
@@ -69,7 +77,12 @@ router.post("/login", (req, res) => {
 
     bcrypt.compare(password, user.password).then(match => {
       if (match) {
-        const payload = { id: user.id, username: user.username }; //add other info we want to send back
+        const payload = {
+          id: user.id,
+          username: user.username,
+          name: user.name,
+          avatar: user.avatar
+        }; //add other info we want to send back
         jwt.sign(payload, secret, { expiresIn: 3600000 }, (err, token) => {
           if (err) throw err;
           res.json({ success: true, token: "Bearer " + token });

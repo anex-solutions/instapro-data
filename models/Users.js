@@ -14,6 +14,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  avatar: { type: String },
   password: {
     type: String,
     required: true
@@ -21,9 +22,6 @@ const userSchema = new Schema({
   date: {
     type: Date,
     default: Date.now()
-  },
-  image: {
-    type: String
   }
   // location: {
   //   type: gps,

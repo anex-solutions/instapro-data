@@ -10,13 +10,22 @@ const postsSchema = new Schema({
     type: String,
     required: true
   },
-  likes: [{ user: { type: Schema.Types.ObjectId, ref: "users" } }],
+  likes: [
+    {
+      user: { type: Schema.Types.ObjectId, ref: "users" },
+      name: { type: String, required: true }
+    }
+  ],
+  name: { type: String, required: true },
+  avatar: { type: String, required: true },
   comments: [
     {
       user: {
         type: Schema.Types.ObjectId,
         ref: "users"
       },
+      name: { type: String, required: true },
+      avatar: { type: String },
       text: {
         type: String,
         required: true

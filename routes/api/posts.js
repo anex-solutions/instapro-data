@@ -11,17 +11,29 @@ const Posts = require("../../models/Posts");
 // Add post
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log(req.body);
+    console.log("-------------------");
     const newPost = new Posts({
+      user: req.body.user.id,
       image: req.body.image,
-      comments: [{ user: req.body.user, text: req.body.text }],
-      user: req.body.user
+      name: req.body.user.name,
+      avatar: req.body.user.avatar || "avatar",
+      comments: [
+        {
+          user: req.body.user.id,
+          name: req.body.user.name,
+          avatar: req.body.user.avatar || "avatar",
+          text: req.body.text
+        }
+      ]
     });
+    console.log(newPost);
     newPost
       .save()
-      .then(post => res.json(post))
-      .catch(err => res.json(err));
+      .then(post => console.log("success") || res.json(post))
+      .catch(err => console.log(err) || res.json(err));
 
     //validation
   }
