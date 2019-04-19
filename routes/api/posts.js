@@ -13,8 +13,6 @@ router.post(
   "/",
   // passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log(req.body);
-    console.log("-------------------");
     const newPost = new Posts({
       user: req.body.user.id,
       image: req.body.image,
@@ -29,7 +27,6 @@ router.post(
         }
       ]
     });
-    console.log(newPost);
     newPost
       .save()
       .then(post => console.log("success") || res.json(post))
@@ -63,5 +60,11 @@ router.put("/", (req, res) => {
 router.delete("/:id", (req, res) => {
   //remove
 });
+
+router.post(
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {}
+);
 
 module.exports = router;
