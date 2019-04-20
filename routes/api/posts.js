@@ -8,21 +8,32 @@ const keys = require("../../config/Key");
 const User = require("../../models/Users");
 const Posts = require("../../models/Posts");
 
+//@router get /api/posts/
+//@descriptin Returns all following posts based on relevance.
+//@ppublic
+router.get("/", (req, res) => {
+  Posts.find()
+    .sort({ date: -1 })
+    .then(posts => res.json(posts))
+    .catch(err => res.status(404).json(err));
+  //validation
+});
+
 // Add post
 router.post(
   "/",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const newPost = new Posts({
-      user: req.body.user.id,
+      user: req.user.id,
       image: req.body.image,
-      name: req.body.user.name,
-      avatar: req.body.user.avatar || "avatar",
+      name: req.user.username,
+      avatar: req.user.avatar || "avatar",
       comments: [
         {
-          user: req.body.user.id,
-          name: req.body.user.name,
-          avatar: req.body.user.avatar || "avatar",
+          user: req.user.id,
+          name: req.user.username,
+          avatar: req.user.avatar || "avatar",
           text: req.body.text
         }
       ]
@@ -35,17 +46,6 @@ router.post(
     //validation
   }
 );
-
-//@router get /api/posts/
-//@descriptin Returns all following posts based on relevance.
-//@ppublic
-router.get("/", (req, res) => {
-  Posts.find()
-    .sort({ date: -1 })
-    .then(posts => res.json(posts))
-    .catch(err => res.status(404).json(err));
-  //validation
-});
 
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
@@ -68,7 +68,7 @@ router.post(
     Posts.findById(req.params.id)
       .then(post => {
         if (
-          post.likes.filter(like => like.user.toString() === req.user._id)
+          post.likes.filter(like => like.user.toString() === req.user.id)
             .length > 0
         ) {
           const Index = post.likes
@@ -80,7 +80,7 @@ router.post(
             .then(post => res.json(post))
             .catch(err => console.log(err));
         } else if (
-          post.likes.filter(like => like.user.toString() === req.user._id)
+          post.likes.filter(like => like.user.toString() === req.user.id)
             .length === 0
         ) {
           post.likes.unshift({ user: req.user.id, name: req.user.username });
