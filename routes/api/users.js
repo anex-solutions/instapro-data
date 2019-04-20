@@ -126,10 +126,3 @@ router.get(
 );
 
 module.exports = router;
-// {
-//   "success": true,
-//   "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYjBmZjlhZjNlMDIzM2FhOGUwYzEwNCIsInVzZXJuYW1lIjoiR3JhZnQwIiwiaWF0IjoxNTU1MTAzOTcxLCJleHAiOjE1NTg3MDM5NzF9.DI1hNNvBsOLTMeP2jRUtsHXYkhgl51rDdxZ4To6cMZk"
-// }
-
-//auth token you can use to test
-//or you can log in with 'Graft0@live.com' '0010110', should also be able to use 'Graft0' as a username instead, super easy to impleent
