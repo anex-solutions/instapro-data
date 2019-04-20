@@ -14,7 +14,7 @@ pipeline {
                         sh "docker build -t localhost:5000/instapro/data:latest ."
                         sh "docker push localhost:5000/instapro/data:latest"
                     } else {
-                        sh "docker build -t localhost:5000/instapro/data:testing ."
+                        sh "docker build -t localhost:5000/instapro/data:${env.BUILD_NUMBER} ."
                         sh "docker image tag localhost:5000/instapro/data:${env.BUILD_NUMBER} localhost:5000/instapro/data:testing"
                         sh "docker push localhost:5000/instapro/data:testing"
                     }
