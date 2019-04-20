@@ -68,7 +68,7 @@ router.post(
     Posts.findById(req.params.id)
       .then(post => {
         if (
-          post.likes.filter(like => like.user.toString() === req.user.id)
+          post.likes.filter(like => like.user.toString() === req.user._id)
             .length > 0
         ) {
           const Index = post.likes
@@ -80,14 +80,37 @@ router.post(
             .then(post => res.json(post))
             .catch(err => console.log(err));
         } else if (
-          post.likes.filter(like => like.user.toString()).length === 0
+          post.likes.filter(like => like.user.toString() === req.user._id)
+            .length === 0
         ) {
-          post.likes.unshift({ user: req.user.id, name: req.user.name });
+          post.likes.unshift({ user: req.user.id, name: req.user.username });
           post
             .save()
             .then(post => res.json(post))
             .catch(err => console.log(err));
         }
+      })
+      .catch(err => console.log(err));
+  }
+);
+
+router.post(
+  "/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Posts.findById(req.params.id)
+      .then(post => {
+        post.comments.unshift({
+          user: req.user.id,
+          name: req.user.username,
+          avatar: req.user.avatar,
+          text: req.body.text
+        });
+        post
+          .save()
+          .then(post => res.json(post))
+          .catch(err => console.log(err));
+        res.json(post);
       })
       .catch(err => console.log(err));
   }
