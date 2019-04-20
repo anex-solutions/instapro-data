@@ -49,7 +49,7 @@ router.post(
 
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
-    .then(post => res.json(post))
+    .then(post => res.json(post)) 
     .catch(err => res.status(404).json({ message: "This post doesn't exist" }));
 });
 

@@ -27,9 +27,6 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now()
   }
-  // location: {
-  //   type: gps,
-  // },
 });
 
 module.exports = User = mongoose.model("users", userSchema);

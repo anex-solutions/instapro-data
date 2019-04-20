@@ -8,6 +8,7 @@ const passport = require("passport");
 
 const users = require("./routes/api/users");
 const posts = require("./routes/api/posts");
+const profiles = require("./routes/api/profiles");
 const multer = require("multer");
 
 const app = express();
@@ -30,11 +31,7 @@ require("./config/passport")(passport);
 
 app.use("/api/users", users);
 app.use("/api/posts", posts);
-
-app.use(express.static(__dirname));
-app.use("/uploads", express.static(__dirname + "/uploads"));
-app.use("/uploads/", express.static(__dirname + "/uploads/"));
-app.use("/uploads/images", express.static(__dirname + "/uploads/images"));
+app.use("/api/profile", profiles);
 
 const port = process.env.PORT || 5000;
 

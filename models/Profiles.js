@@ -6,22 +6,42 @@ const profileSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true
   },
-  bio: {
+  name: {
     type: String,
     required: true
   },
-  phone: {
-    type: Number
+  username: {
+    type: String,
+    required: true
+  },
+  avatar: {
+    type: String
   },
   gender: {
     type: String
   },
-
+  phone: {
+    type: Number
+  },
+  bio: {
+    type: String
+  },
+  website: {
+    type: String
+  },
   following: [
     {
       user: {
         type: Schema.Types.ObjectId,
         ref: "user"
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      avatar: {
+        type: String,
+        default: "https://static.thenounproject.com/png/8752-200.png"
       },
       date: {
         type: Date,
@@ -42,7 +62,10 @@ const profileSchema = new Schema({
     }
   ],
   likes: [
-    { post: { type: Schema.Types.ObjectId, ref: "posts" }, date: Date.now() }
+    {
+      post: { type: Schema.Types.ObjectId, ref: "posts" },
+      date: { type: Date, default: Date.now() }
+    }
   ],
   date: {
     type: Date,

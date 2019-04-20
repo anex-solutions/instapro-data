@@ -10,6 +10,7 @@ const validateLogin = require("../../validation/login");
 const secret = require("../../config/key").ourSecret;
 
 const User = require("../../models/Users");
+const Profile = require("../../models/Profiles");
 
 router.get("/test", (req, res) => {
   res.json({ Message: "This router works" });
@@ -32,8 +33,7 @@ router.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           username: req.body.username,
-          password: req.body.password,
-          image: req.body.image
+          password: req.body.password
         });
 
         bcrypt.genSalt(10, (err, salt) => {
@@ -42,7 +42,20 @@ router.post("/register", (req, res) => {
             newUser.password = hash;
             newUser
               .save()
-              .then(user => res.json(user))
+              .then(user => {
+                const newProfile = new Profile({
+                  name: req.body.name,
+                  user: user._id,
+                  username: user.username,
+                  avatar: user.avatar
+                });
+                newProfile
+                  .save()
+                  .then(profile => {
+                    res.json(user);
+                  })
+                  .catch(err => console.log(err));
+              })
               .catch(err => console.log(err));
           });
         });
