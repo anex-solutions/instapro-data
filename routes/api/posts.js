@@ -64,7 +64,33 @@ router.delete("/:id", (req, res) => {
 router.post(
   "/like/:id",
   passport.authenticate("jwt", { session: false }),
-  (req, res) => {}
+  (req, res) => {
+    Posts.findById(req.params.id)
+      .then(post => {
+        if (
+          post.likes.filter(like => like.user.toString() === req.user.id)
+            .length > 0
+        ) {
+          const Index = post.likes
+            .map(like => like.user.toString())
+            .indexOf(req.user.id);
+          post.likes.splice(Index, 1);
+          post
+            .save()
+            .then(post => res.json(post))
+            .catch(err => console.log(err));
+        } else if (
+          post.likes.filter(like => like.user.toString()).length === 0
+        ) {
+          post.likes.unshift({ user: req.user.id, name: req.user.name });
+          post
+            .save()
+            .then(post => res.json(post))
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(err));
+  }
 );
 
 module.exports = router;
