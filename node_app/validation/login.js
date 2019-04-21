@@ -12,12 +12,12 @@ module.exports = function validateLogin(data) {
     errors.email = "Please enter a valid email...";
   }
 
-  if (Validator.isEmpty(data.email) && Validator.isEmpty(data.username)) {
+  if (Validator.isEmpty(data.email) & Validator.isEmpty(data.username)) {
     errors.email = "Must provide either email or username...";
   }
 
   if (Validator.isEmail(data.password)) {
-    errors.email = "PAssword field required...";
+    errors.email = "Password field required...";
   }
 
   return {
