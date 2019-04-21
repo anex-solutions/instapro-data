@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('test') {
             steps {
-
                 echo 'add tests..'
             }
         }
@@ -12,20 +11,15 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
-                        sh "npm install \
-                            npm test \
-                            docker build -t localhost:5000/instapro_data:latest . \
-                            docker push localhost:5000/instapro_data:latest"
+                        sh "docker build -t localhost:5000/instapro_data:latest ."
+                        sh "docker push localhost:5000/instapro_data:latest"
                     } else {
-                        sh "npm install \
-                            npm test \
-                            docker build -t localhost:5000/instapro_data:testing . \
-                            docker push localhost:5000/instapro_data:testing"
+                        sh "docker build -t localhost:5000/instapro_data:testing ."
+                        sh "docker push localhost:5000/instapro_data:testing"
                     }
                 }
             }
         }
-        // docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
         stage('Deploy') {
             steps {
                 script {
