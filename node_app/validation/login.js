@@ -8,10 +8,6 @@ module.exports = function validateLogin(data) {
   data.username = !isEmpty(data.username) ? data.username : "";
   data.password = !isEmpty(data.password) ? data.password : "";
 
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Please enter a valid email...";
-  }
-
   if (Validator.isEmpty(data.email) & Validator.isEmpty(data.username)) {
     errors.email = "Must provide either email or username...";
   }

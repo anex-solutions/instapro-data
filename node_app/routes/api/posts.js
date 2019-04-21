@@ -49,7 +49,7 @@ router.post(
 
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
-    .then(post => res.json(post)) 
+    .then(post => res.json(post))
     .catch(err => res.status(404).json({ message: "This post doesn't exist" }));
 });
 
@@ -113,6 +113,47 @@ router.post(
         res.json(post);
       })
       .catch(err => console.log(err));
+  }
+);
+
+router.post(
+  "/like/:id/:commentID",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Posts.findById(req.params.id)
+      .then(post => {
+        let comment = post.comments.filter(
+          comment => comment._id.toString() === req.params.commentID
+        );
+        if (
+          comment[0].likes.filter(
+            comment => comment.user.toString() === req.user.id
+          ).length > 0
+        ) {
+          const Index = comment[0].likes
+            .map(comment => comment.user.toString())
+            .indexOf(req.user.id);
+          comment[0].likes.splice(Index, 1);
+          post
+            .save()
+            .then(post => res.json(post))
+            .catch(err => console.log(err));
+        } else if (
+          comment[0].likes.filter(
+            comment => comment.user.toString() === req.user.id
+          ).length === 0
+        ) {
+          comment[0].likes.unshift({
+            user: req.user.id,
+            name: req.user.username
+          });
+          post
+            .save()
+            .then(post => res.json(post))
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(`err: ${err}`));
   }
 );
 
