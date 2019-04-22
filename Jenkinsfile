@@ -11,14 +11,14 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                       sh "docker login -u $USER -p $PASS registry.anexsolution.co.uk"
+                       sh "docker login -u $USER -p $PASS registry.anexsolutions.co.uk"
                     }
                     if (env.BRANCH_NAME == 'master') {
-                        sh "docker build -t registry.anexsolution.co.uk/instapro/data:latest ."
-                        sh "docker push registry.anexsolution.co.uk/instapro/data:latest"
+                        sh "docker build -t registry.anexsolutions.co.uk/instapro/data:latest ."
+                        sh "docker push registry.anexsolutions.co.uk/instapro/data:latest"
                     } else {
-                        sh "docker build -t registry.anexsolution.co.uk/instapro/data:testing ."
-                        sh "docker push registry.anexsolution.co.uk/instapro/data:testing"
+                        sh "docker build -t registry.anexsolutions.co.uk/instapro/data:testing ."
+                        sh "docker push registry.anexsolutions.co.uk/instapro/data:testing"
                     }
                 }
             }
