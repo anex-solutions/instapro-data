@@ -10,12 +10,15 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
+                    withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                       sh "docker login -u $USER -p $PASS registry.internallab.co.uk:5000"
+                    }
                     if (env.BRANCH_NAME == 'master') {
-                        sh "docker build -t localhost:5000/instapro_data:latest ."
-                        sh "docker push localhost:5000/instapro_data:latest"
+                        sh "docker build -t registry.anexsolution.co.uk/instapro/data:latest ."
+                        sh "docker push registry.anexsolution.co.uk/instapro/data:latest"
                     } else {
-                        sh "docker build -t localhost:5000/instapro_data:testing ."
-                        sh "docker push localhost:5000/instapro_data:testing"
+                        sh "docker build -t registry.anexsolution.co.uk/instapro/data:testing ."
+                        sh "docker push registry.anexsolution.co.uk/instapro/data:testing"
                     }
                 }
             }
