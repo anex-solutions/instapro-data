@@ -1,0 +1,44 @@
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      namespace: instapro-latest
+      name: data
+    spec:
+      ports:
+        - name: data
+          port: 80
+          targetPort: 80
+      selector:
+        app: data
+
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      namespace: instapro-latest
+      labels:
+        app: data
+      name: data
+    spec:
+      replicas: 1
+      strategy: {}
+      template:
+        metadata:
+          labels:
+            app: data
+        spec:
+          strategy:
+            type: Recreate
+          containers:
+            - image: registry.anexsolutions.co.uk/instapro/data:latest
+              name: data
+              imagePullPolicy: Always
+              resources: {}
+              stdin: true
+              tty: true
+          restartPolicy: Always
+          imagePullSecrets:
+            - name: regcred
+kind: List
+metadata: {}

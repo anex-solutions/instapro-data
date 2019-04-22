@@ -25,6 +25,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         echo 'deploy app:latest to k8s ascess at latest.anex-solutions.co.uk/instapro'
+                        kubernetesDeploy configs: "k8s/*.yaml", kubeconfigId: 'kmaster'
                     } else {
                         echo 'deploy app:latest with data-ms swapped to :testing to k8s ascess at testing.anex-solutions.co.uk/instapro-' + env.BRANCH_NAME
                     }

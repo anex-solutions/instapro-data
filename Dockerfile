@@ -8,4 +8,6 @@ COPY node_app/ ./
 
 RUN npm install
 
+ENV PORT=80
+
 CMD [ "npm", "start" ]

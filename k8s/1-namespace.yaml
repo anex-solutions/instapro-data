@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: instapro-latest
+  labels:
+    name: instapro-latest
