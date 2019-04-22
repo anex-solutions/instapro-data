@@ -11,7 +11,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                       sh "docker login -u $USER -p $PASS registry.internallab.co.uk:5000"
+                       sh "docker login -u $USER -p $PASS registry.anexsolution.co.uk"
                     }
                     if (env.BRANCH_NAME == 'master') {
                         sh "docker build -t registry.anexsolution.co.uk/instapro/data:latest ."
