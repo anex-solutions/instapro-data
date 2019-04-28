@@ -19,6 +19,17 @@ router.get("/", (req, res) => {
   //validation
 });
 
+//@router get /api/posts/
+//@descriptin Returns all following posts based on relevance.
+//@ppublic
+router.get("/:id", (req, res) => {
+  Posts.find({ user: req.params.id })
+    .sort({ date: -1 })
+    .then(posts => res.json(posts))
+    .catch(err => res.status(404).json(err));
+  //validation
+});
+
 // Add post
 router.post(
   "/",
