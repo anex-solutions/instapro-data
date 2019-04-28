@@ -7,7 +7,7 @@ const passport = require("passport");
 const validateRegistration = require("../../validation/register");
 const validateLogin = require("../../validation/login");
 
-const secret = require("../../config/key").ourSecret;
+const secret = require("../../config/Key").ourSecret;
 
 const User = require("../../models/Users");
 const Profile = require("../../models/Profiles");

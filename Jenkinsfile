@@ -10,12 +10,15 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
+                    withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                       sh "docker login -u $USER -p $PASS registry.anexsolutions.co.uk"
+                    }
                     if (env.BRANCH_NAME == 'master') {
-                        sh "docker build -t localhost:5000/instapro_data:latest ."
-                        sh "docker push localhost:5000/instapro_data:latest"
+                        sh "docker build -t registry.anexsolutions.co.uk/instapro/data:latest ."
+                        sh "docker push registry.anexsolutions.co.uk/instapro/data:latest"
                     } else {
-                        sh "docker build -t localhost:5000/instapro_data:testing ."
-                        sh "docker push localhost:5000/instapro_data:testing"
+                        sh "docker build -t registry.anexsolutions.co.uk/instapro/data:testing ."
+                        sh "docker push registry.anexsolutions.co.uk/instapro/data:testing"
                     }
                 }
             }
@@ -25,6 +28,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         echo 'deploy app:latest to k8s ascess at latest.anex-solutions.co.uk/instapro'
+                        kubernetesDeploy configs: "k8s/*.yaml", kubeconfigId: 'kmaster'
                     } else {
                         echo 'deploy app:latest with data-ms swapped to :testing to k8s ascess at testing.anex-solutions.co.uk/instapro-' + env.BRANCH_NAME
                     }
